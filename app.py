@@ -171,7 +171,14 @@ with st.sidebar:
     st.info(MODEL_DESCRIPTIONS[model_name])
 
     st.markdown("")
-    run_clicked = st.button("🚀 Run Model", use_container_width=True)
+    run_clicked = st.button(
+        "🚀 Run Model", 
+        use_container_width=True,
+        disabled=(uploaded_file is None)
+    )
+    
+    if uploaded_file is None:
+        st.caption("⚠️ Please upload a dataset first")
 
     # Author Info in Sidebar
     st.markdown("---")
@@ -199,11 +206,12 @@ st.markdown("")
 # Run Model
 # ===============================
 if run_clicked:
-
-    if uploaded_file is not None:
-        X_ext, y_ext = load_uploaded_test_data(uploaded_file)
-    else:
-        X_ext, y_ext = None, None
+    
+    if uploaded_file is None:
+        st.error("⚠️ Please upload a test dataset before running the model.")
+        st.stop()
+    
+    X_ext, y_ext = load_uploaded_test_data(uploaded_file)
 
     with st.spinner(f"Training **{model_name}** … please wait"):
         # ===============================
