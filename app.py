@@ -130,6 +130,20 @@ with st.sidebar:
         help="Upload a CSV file with the same feature columns as the training data.",
     )
 
+    # Download Dataset Button
+    dataset_path = "dataset_phishing.csv"
+    try:
+        dataset_df = pd.read_csv(dataset_path)
+        st.download_button(
+            label="⬇️ Download Dataset CSV",
+            data=dataset_df.to_csv(index=False).encode("utf-8"),
+            file_name="dataset_phishing.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
+    except FileNotFoundError:
+        st.warning("Dataset file not found.")
+
     st.markdown("")
 
     # Model Selection
